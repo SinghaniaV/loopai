@@ -1,23 +1,31 @@
 import secrets
 import string
+from fastapi import Response
+from asyncio import Event, sleep
 import pandas as pd
 from pathlib import Path
 from database.db_utils import get_connection
 
 
-def generate_report_id(length: int) -> str:
+def generate_randon_report_id(length: int) -> str:
     characters = string.ascii_letters
     random_str = ''.join(secrets.choice(characters) for _ in range(length))
     return random_str
 
 
-def trigger_report_gen():
+async def trigger_report_gen(new_report_id: str, status_event: Event) -> None:
     # TODO
     engine = get_connection()
-    new_report_id = generate_report_id(5)
+    await sleep(30)
+    status_event.set()
 
 
-def get_report_df(report_id: str) -> pd.DataFrame:
+def generate_report_csv(report_id: str) -> None:
+    """
+    search for the report_id in database and if found create a {report_id}.csv file else return.
+    :param report_id: str
+    :return: None
+    """
     data = {
         "Name": ["John", "Alice", "Bob"],
         "Age": [30, 25, 28],
@@ -25,17 +33,7 @@ def get_report_df(report_id: str) -> pd.DataFrame:
     }
 
     # Create a Pandas DataFrame
-    df = pd.DataFrame(data)
-
-    return df
-
-
-def get_csv_file(report_id: str) -> str:
-    # getting pd.DataFrame of the report
-    report_df = get_report_df(report_id)
-    # converting pd.DataFrame to csv and storing in a dir
+    report_df = pd.DataFrame(data)
     filepath = Path(f'./generated_csv/{report_id}.csv')
     filepath.parent.mkdir(parents=True, exist_ok=True)
     report_df.to_csv(filepath)
-    # returning the path to csv
-    return f'./generated_csv/{report_id}.csv'

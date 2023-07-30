@@ -70,8 +70,8 @@ class MenuHours(Base):
 class Reports(Base):
     """
     Class for report table.
-    store_id, uptime_last_hour(in minutes), uptime_last_day(in hours), update_last_week(in hours),
-    downtime_last_hour(in minutes), downtime_last_day(in hours), downtime_last_week(in hours)
+    we will be storing all the report_ids and corresponding data accordingly.
+    if we have to retrieve all the reports generated so far we will return unique entries in report_id column
     """
 
     __tablename__ = 'reports'
