@@ -1,5 +1,7 @@
 import os
 import time
+import random
+import string
 from dotenv import load_dotenv
 import pandas as pd
 from sqlalchemy.engine.base import Engine
@@ -25,7 +27,6 @@ def get_connection() -> Engine:
         # Establish a MySQL connection
         sqlalchemy_database_url = f'mysql+mysqlconnector://{mysql_user}:{mysql_password}@{mysql_host}:3306/{mysql_db}'
         engine = create_engine(sqlalchemy_database_url)
-        # print(f'Connection to the {mysql_host} for user {mysql_user} created successfully.')
         return engine
 
     except Exception as connect_exception:
@@ -46,6 +47,13 @@ def read_data(file_path: str) -> pd.DataFrame:
         print(f'Unable to access csv file, {repr(read_exception)}')
 
 
+def create_tables() -> None:
+    # connecting to MySQL server.
+    engine = get_connection()
+    # creating tables
+    Base.metadata.create_all(engine)
+
+
 def insert_data() -> None:
     """
     formats and inserts the csv file into the database.
@@ -56,9 +64,6 @@ def insert_data() -> None:
 
     # to measure performance
     start_time = time.time()
-
-    # creating tables
-    Base.metadata.create_all(engine)
 
     # reading csv files
     store_status_df: pd.DataFrame = read_data('../data/store_status.csv')
@@ -84,5 +89,28 @@ def insert_data() -> None:
         print(f'Successful in creating and populating the tables in {execution_time:.2f} minutes')
 
 
+def insert_dummy_data() -> None:
+    dummy_data = []
+    for _ in range(10):
+        dummy_item = {
+            'report_id': ''.join(random.choices(string.ascii_uppercase, k=10)),
+            'store_id': random.randint(1, 100),
+            'uptime_last_hour': random.randint(0, 60),
+            'uptime_last_day': random.randint(0, 1440),
+            'uptime_last_week': random.randint(0, 10080),
+            'downtime_last_hour': random.randint(0, 60),
+            'downtime_last_day': random.randint(0, 1440),
+            'downtime_last_week': random.randint(0, 10080)
+        }
+        dummy_data.append(dummy_item)
+
+    engine = get_connection()
+
+    dummy_df = pd.DataFrame.from_records(dummy_data, nrows=10)
+    dummy_df.to_sql('reports', con=engine, if_exists='replace', index=False)
+
+
 if __name__ == "__main__":
-    insert_data()
+    # insert_data()
+    # create_tables()
+    insert_dummy_data()

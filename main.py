@@ -22,7 +22,7 @@ async def trigger_report() -> str:
 
 
 @app.get('/get_report/{report_id}')
-async def get_report(report_id: str):
+def get_report(report_id: str):
     global status_event
 
     # if the trigger_report event is running respond with 'Running'.

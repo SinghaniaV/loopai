@@ -77,7 +77,7 @@ class Reports(Base):
     __tablename__ = 'reports'
 
     id = Column(INT, primary_key=True, autoincrement=True)
-    report_id = Column(BIGINT, index=True)
+    report_id = Column(VARCHAR(10), index=True)
     store_id = Column(BIGINT, index=True)
     uptime_last_hour = Column(INT)
     uptime_last_day = Column(INT)
