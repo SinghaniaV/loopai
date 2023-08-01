@@ -5,9 +5,7 @@ Loop monitors several restaurants in the US and needs to monitor if the store is
 Build backend APIs that will help restaurant owners to achieve this goal.
 
 
-###  My work
-view the Jupyter Notebook about data analysis on 
-[nbviewer.org](https://nbviewer.org/github/SinghaniaV/loopai/blob/master/notebooks/EDA.ipynb)
+###  My ongoing work
 
 1. since, the smallest unit for which we have to measure the availability is an hour.
 2. we divide menu_hours into batches of 1 hour for each day. (eg: 9AM to 12PM contains 3 batches)
