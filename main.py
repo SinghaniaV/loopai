@@ -16,7 +16,8 @@ async def trigger_report() -> str:
     # generating a report_id with length 5
     new_report_id = generate_randon_report_id(length=5)
 
-    # creating an asynchronous task from a coroutine
+    # creating an asynchronous task from a coroutine.
+    # why not threading? - "threading is for working in parallel, async is for waiting in parallel"
     create_task(trigger_report_gen(new_report_id=new_report_id, status_event=status_event))
     return f'generating report with report_id {new_report_id}'
 

@@ -27,7 +27,6 @@ async def trigger_report_gen(new_report_id: str, status_event: Event) -> None:
     time_zone_df: pd.DataFrame = pd.read_sql_table('time_zone', con=engine)
     menu_hours_df: pd.DataFrame = pd.read_sql_table('menu_hours', con=engine)
 
-
     # manipulate above DFs to get the desired report in result_df
     report_df: pd.DataFrame()
     # generate csv from result_df
